@@ -1,6 +1,7 @@
 ///---User configurable stuff---///
 ///---Modifiers---///
 #define MOD             XCB_MOD_MASK_4       /* Super/Windows key  or check xmodmap(1) with -pm  defined in /usr/include/xcb/xproto.h */
+
 ///--Speed---///
 /* Move this many pixels when moving or resizing with keyboard unless the window has hints saying otherwise.
  *0)move step slow   1)move step fast
@@ -10,37 +11,45 @@ static const uint16_t movements[] = {20,40,15,400};
 static const bool     resize_by_line          = true;
 /* the ratio used when resizing and keeping the aspect */
 static const float    resize_keep_aspect_ratio= 1.03;
+
 ///---Offsets---///
 /*0)offsetx          1)offsety
  *2)maxwidth         3)maxheight */
 static const uint8_t offsets[] = {0,0,0,0};
+
 ///---Colors---///
 /*0)focuscol         1)unfocuscol
  *2)fixedcol         3)unkilcol
  *4)fixedunkilcol    5)outerbordercol
  *6)emptycol         */
-static const char *colors[] = {"#35586c","#333333","#7a8c5c","#ff6666","#cc9933","#0d131a","#000000"};
+//static const char *colors[] = {"#21110a","#21110a","#21110a","#21110a","#21110a","#fbfbfb","#000000"};
+static const char *colors[] = {"#ababab","#ababab","#0000ff","#ff00ff","#ffff00","#fbfbfb","#000000"};
 /* if this is set to true the inner border and outer borders colors will be swapped */
-static const bool inverted_colors = true;
+static const bool inverted_colors = false;
+
 ///---Cursor---///
 /* default position of the cursor:
  * correct values are:
  * TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT, MIDDLE
  * All these are relative to the current window. */
 #define CURSOR_POSITION MIDDLE
+
 ///---Borders---///
 /*0) Outer border size. If you put this negative it will be a square.
  *1) Full borderwidth    2) Magnet border size
  *3) Resize border size  */
-static const uint8_t borders[] = {3,5,5,4};
+static const uint8_t borders[] = {8,10,5,4};
 /* Windows that won't have a border.
  * It uses substring comparison with what is found in the WM_NAME
  * attribute of the window. You can test this using `xprop WM_NAME`
  */
 #define LOOK_INTO "WM_NAME"
-static const char *ignore_names[] = {"bar", "xclock"};
+static const char *ignore_names[] = {"bar", "xclock", "polybar", "lemonbar"};
+
 ///--Menus and Programs---///
-static const char *menucmd[]   = { "", NULL };
+static const char *menucmd[]   = { "ndmen", NULL };
+static const char *termcmd[]   = { "term", NULL };
+
 ///--Custom foo---///
 static void halfandcentered(const Arg *arg)
 {
@@ -49,6 +58,7 @@ static void halfandcentered(const Arg *arg)
 	Arg arg3 = {.i=TWOBWM_TELEPORT_CENTER};
 	teleport(&arg3);
 }
+
 ///---Shortcuts---///
 /* Check /usr/include/X11/keysymdef.h for the list of all keys
  * 0x000000 is for no modkey
@@ -81,30 +91,20 @@ static void halfandcentered(const Arg *arg)
 static key keys[] = {
     /* modifier           key            function           argument */
     // Focus to next/previous window
-    {  MOD ,              XK_Tab,        focusnext,         {.i=TWOBWM_FOCUS_NEXT}},
-    {  MOD |SHIFT,        XK_Tab,        focusnext,         {.i=TWOBWM_FOCUS_PREVIOUS}},
+    {  MOD ,              XK_j,          focusnext,         {.i=TWOBWM_FOCUS_NEXT}},
+    {  MOD ,              XK_k,          focusnext,         {.i=TWOBWM_FOCUS_PREVIOUS}},
     // Kill a window
-    {  MOD ,              XK_q,          deletewin,         {}},
+    {  MOD |SHIFT,        XK_q,          deletewin,         {}},
     // Resize a window
     {  MOD |SHIFT,        XK_k,          resizestep,        {.i=TWOBWM_RESIZE_UP}},
     {  MOD |SHIFT,        XK_j,          resizestep,        {.i=TWOBWM_RESIZE_DOWN}},
     {  MOD |SHIFT,        XK_l,          resizestep,        {.i=TWOBWM_RESIZE_RIGHT}},
     {  MOD |SHIFT,        XK_h,          resizestep,        {.i=TWOBWM_RESIZE_LEFT}},
-    // Resize a window slower
-    {  MOD |SHIFT|CONTROL,XK_k,          resizestep,        {.i=TWOBWM_RESIZE_UP_SLOW}},
-    {  MOD |SHIFT|CONTROL,XK_j,          resizestep,        {.i=TWOBWM_RESIZE_DOWN_SLOW}},
-    {  MOD |SHIFT|CONTROL,XK_l,          resizestep,        {.i=TWOBWM_RESIZE_RIGHT_SLOW}},
-    {  MOD |SHIFT|CONTROL,XK_h,          resizestep,        {.i=TWOBWM_RESIZE_LEFT_SLOW}},
     // Move a window
-    {  MOD ,              XK_k,          movestep,          {.i=TWOBWM_MOVE_UP}},
-    {  MOD ,              XK_j,          movestep,          {.i=TWOBWM_MOVE_DOWN}},
-    {  MOD ,              XK_l,          movestep,          {.i=TWOBWM_MOVE_RIGHT}},
-    {  MOD ,              XK_h,          movestep,          {.i=TWOBWM_MOVE_LEFT}},
-    // Move a window slower
-    {  MOD |CONTROL,      XK_k,          movestep,          {.i=TWOBWM_MOVE_UP_SLOW}},
-    {  MOD |CONTROL,      XK_j,          movestep,          {.i=TWOBWM_MOVE_DOWN_SLOW}},
-    {  MOD |CONTROL,      XK_l,          movestep,          {.i=TWOBWM_MOVE_RIGHT_SLOW}},
-    {  MOD |CONTROL,      XK_h,          movestep,          {.i=TWOBWM_MOVE_LEFT_SLOW}},
+    {  MOD |CONTROL,      XK_k,          movestep,          {.i=TWOBWM_MOVE_UP}},
+    {  MOD |CONTROL,      XK_j,          movestep,          {.i=TWOBWM_MOVE_DOWN}},
+    {  MOD |CONTROL,      XK_l,          movestep,          {.i=TWOBWM_MOVE_RIGHT}},
+    {  MOD |CONTROL,      XK_h,          movestep,          {.i=TWOBWM_MOVE_LEFT}},
     // Teleport the window to an area of the screen.
     // Center:
     {  MOD ,              XK_g,          teleport,          {.i=TWOBWM_TELEPORT_CENTER}},
@@ -178,10 +178,11 @@ static key keys[] = {
     {  MOD |SHIFT,        XK_Right,      cursor_move,       {.i=TWOBWM_CURSOR_RIGHT}},
     {  MOD |SHIFT,        XK_Left,       cursor_move,       {.i=TWOBWM_CURSOR_LEFT}},
     // Start programs
-    {  MOD ,              XK_w,          start,             {.com = menucmd}},
+    {  MOD ,              XK_p,          start,             {.com = menucmd}},
+    {  MOD ,              XK_Return,     start,             {.com = termcmd}},
     // Exit or restart 2bwm
-    {  MOD |CONTROL,      XK_q,          twobwm_exit,       {.i=0}},
-    {  MOD |CONTROL,      XK_r,          twobwm_restart,    {.i=0}},
+    {  MOD |SHIFT,        XK_e,          twobwm_exit,       {.i=0}},
+    {  MOD |SHIFT,        XK_r,          twobwm_restart,    {.i=0}},
     {  MOD ,              XK_space,      halfandcentered,   {.i=0}},
     // Change current workspace
        DESKTOPCHANGE(     XK_1,                             0)
