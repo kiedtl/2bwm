@@ -15,15 +15,14 @@ static const float    resize_keep_aspect_ratio= 1.03;
 ///---Offsets---///
 /*0)offsetx          1)offsety
  *2)maxwidth         3)maxheight */
-static const uint8_t offsets[] = {0,0,0,0};
+static const uint8_t offsets[] = {84,84,84,84};
 
 ///---Colors---///
 /*0)focuscol         1)unfocuscol
  *2)fixedcol         3)unkilcol
  *4)fixedunkilcol    5)outerbordercol
  *6)emptycol         */
-//static const char *colors[] = {"#21110a","#21110a","#21110a","#21110a","#21110a","#fbfbfb","#000000"};
-static const char *colors[] = {"#ababab","#ababab","#0000ff","#ff00ff","#ffff00","#fbfbfb","#000000"};
+static const char *colors[] = {"#9aa09e","#9aa09e","#0000ff","#ff00ff","#ffff00","#fbfbfa","#142a36"};
 /* if this is set to true the inner border and outer borders colors will be swapped */
 static const bool inverted_colors = false;
 
