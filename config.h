@@ -15,7 +15,7 @@ static const float    resize_keep_aspect_ratio= 1.03;
 ///---Offsets---///
 /*0)offsetx          1)offsety
  *2)maxwidth         3)maxheight */
-static const uint8_t offsets[] = {84,84,84,84};
+static const uint8_t offsets[] = {0,0,0,0};
 
 ///---Colors---///
 /*0)focuscol         1)unfocuscol
@@ -43,7 +43,7 @@ static const uint8_t borders[] = {8,10,5,4};
  * attribute of the window. You can test this using `xprop WM_NAME`
  */
 #define LOOK_INTO "WM_NAME"
-static const char *ignore_names[] = {"bar", "xclock", "polybar", "lemonbar"};
+static const char *ignore_names[] = {"dlskfjldskfjlkdfjlsdkfjlsdkfjlsd"};
 
 ///--Menus and Programs---///
 static const char *menucmd[]   = { "ndmen", NULL };
